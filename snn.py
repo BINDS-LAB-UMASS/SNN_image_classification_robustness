@@ -5,6 +5,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 from bindsnet.network.monitors import Monitor
 from time import time as t_
+import pandas as pd
 import os
 
 
@@ -14,6 +15,9 @@ torch.manual_seed(random_seed)
 
 batch_size = 32
 time = 100
+
+ANN_accuracy = 0
+SNN_accuracy = 0
 
 if torch.cuda.is_available():
     torch.set_default_tensor_type('torch.cuda.FloatTensor')
@@ -79,9 +83,9 @@ def validate():
         correct += pred.eq(target.data).cpu().sum()
 
 
-    accuracy = 100. * correct.to(torch.float32) / len(train_loader2.dataset)
+    ANN_accuracy = 100. * correct.to(torch.float32) / len(train_loader2.dataset)
 
-    print("ANN accuracy:", accuracy)
+    print("ANN accuracy:", ANN_accuracy)
 
 validate()
 
@@ -102,8 +106,12 @@ for index, (data, target) in enumerate(train_loader2):
     accuracy = 100. * correct.to(torch.float32) / (index + 1)
     SNN.reset_()
 
-accuracy = 100. * correct.to(torch.float32) / len(train_loader2.dataset)
+SNN_accuracy = 100. * correct.to(torch.float32) / len(train_loader2.dataset)
 
 
-print("accuracy:, ", accuracy)
-SNN.run(inpts=inpts, time=time)
+print("accuracy:, ", SNN_accuracy)
+
+df = pd.DataFrame({"ANN accuracy":[ANN_accuracy],
+                   "SNN accuracy": [SNN_accuracy]})
+
+df.to_csv("accuracy_hidden_1.csv")
