@@ -22,8 +22,10 @@ SNN_accuracy = 0
 if torch.cuda.is_available():
     torch.set_default_tensor_type('torch.cuda.FloatTensor')
     device = torch.device('cuda')
+    print("Cuda is available")
 else:
     device = torch.device('cpu')
+    print("Cuda is not available")
 
 train_dataset = datasets.MNIST('./data',
                                train=True,
