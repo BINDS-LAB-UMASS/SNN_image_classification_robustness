@@ -11,3 +11,5 @@
 
 
 python train.py
+
+exit
