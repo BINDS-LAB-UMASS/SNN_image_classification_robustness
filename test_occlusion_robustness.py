@@ -28,7 +28,6 @@ def main(occlusion_percentage=0):
         device = torch.device('cpu')
         print("Cuda is not available")
 
-
     class RandomlyOcclude(object):
 
         def __init__(self, percentage):
@@ -38,8 +37,8 @@ def main(occlusion_percentage=0):
             mask = torch.Tensor(img.shape[1], img.shape[2]).uniform_() > self.percentage
             return img * mask.float()
 
-
     class Net(nn.Module):
+
         def __init__(self):
             super(Net, self).__init__()
             self.fc1 = nn.Linear(28 * 28, 1000)
