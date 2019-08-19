@@ -8,6 +8,13 @@ from time import time as t_
 import pandas as pd
 import argparse
 
+if torch.cuda.is_available():
+    torch.set_default_tensor_type('torch.cuda.FloatTensor')
+    device = torch.device('cuda')
+    print("Cuda is available")
+else:
+    device = torch.device('cpu')
+    print("Cuda is not available")
 
 class Net(nn.Module):
 
@@ -33,14 +40,6 @@ def main(occlusion_percentage=0):
 
     ANN_accuracy = 0
     SNN_accuracy = 0
-
-    if torch.cuda.is_available():
-        torch.set_default_tensor_type('torch.cuda.FloatTensor')
-        device = torch.device('cuda')
-        print("Cuda is available")
-    else:
-        device = torch.device('cpu')
-        print("Cuda is not available")
 
     class RandomlyOcclude(object):
 
