@@ -27,23 +27,16 @@ else:
     device = torch.device('cpu')
     print("Cuda is not available")
 
-train_dataset = datasets.MNIST('./data',
-                               train=True,
-                               download=True,
-                               transform=transforms.ToTensor())
-
-train_loader2 = torch.utils.data.DataLoader(dataset=train_dataset,
-                                           shuffle=True)
 
 
 class RandomlyOcclude(object):
 
     def __init__(self, percentage):
-        self.percentage = percentage
+        self.percentage = percentage/100
 
     def __call__(self, img):
-        mask = torch.tensor(img.shape[1], img.shape[2])
-
+        mask = torch.Tensor(img.shape[1], img.shape[2]).uniform_() > self.percentage
+        return img * mask.float()
 
 
 class Net(nn.Module):
@@ -52,12 +45,32 @@ class Net(nn.Module):
         self.fc1 = nn.Linear(28 * 28, 1000)
         self.fc2 = nn.Linear(1000, 10)
 
-
     def forward(self, x):
-            x = x.view(-1, 28*28)
-            x = F.relu(self.fc1(x))
-            x = self.fc2(x)
-            return F.log_softmax(x)
+        x = x.view(-1, 28 * 28)
+        x = F.relu(self.fc1(x))
+        x = self.fc2(x)
+        return F.log_softmax(x)
+
+train_dataset2 = datasets.MNIST('./data',
+                                   train=True,
+                                   download=True,
+                                   transform=transforms.Compose([transforms.ToTensor(), RandomlyOcclude(50)]))
+
+
+train_dataset = datasets.MNIST('./data',
+                               train=True,
+                               download=True,
+                               transform=transforms.ToTensor())
+
+train_loader2 = torch.utils.data.DataLoader(dataset=train_dataset2,
+                                                shuffle=True)
+
+train_loader = torch.utils.data.DataLoader(dataset=train_dataset,
+                                           shuffle=True, batch_size=train_dataset.__len__())
+
+for d, target in train_loader:
+    data = d.to(device)
+
 
 model = torch.load('trained_model.pt')
 

@@ -32,8 +32,15 @@ train_dataset = datasets.MNIST('./data',
                                download=True,
                                transform=transforms.ToTensor())
 
+train_loader = torch.utils.data.DataLoader(dataset=train_dataset,
+                                           shuffle=True, batch_size=train_dataset.__len__())
+
 train_loader2 = torch.utils.data.DataLoader(dataset=train_dataset,
                                            shuffle=True)
+
+
+for d, target in train_loader:
+    data = d.to(device)
 
 
 class Net(nn.Module):
