@@ -36,6 +36,16 @@ train_loader2 = torch.utils.data.DataLoader(dataset=train_dataset,
                                            shuffle=True)
 
 
+class RandomlyOcclude(object):
+
+    def __init__(self, percentage):
+        self.percentage = percentage
+
+    def __call__(self, img):
+        mask = torch.tensor(img.shape[1], img.shape[2])
+
+
+
 class Net(nn.Module):
     def __init__(self):
         super(Net, self).__init__()
