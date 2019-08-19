@@ -95,7 +95,7 @@ validate()
 
 start = t_()
 for index, (data, target) in enumerate(train_loader2):
-    print(f'sample {index+1} (elapsed {t_() - start:.2f})')
+    print('sample ', index+1, 'elapsed', t_() - start)
     start = t_()
 
     data = data.to(device)
