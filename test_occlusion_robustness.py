@@ -48,7 +48,7 @@ def main(occlusion_percentage=0):
 
         def __call__(self, img):
             mask = torch.Tensor(img.shape[1], img.shape[2]).uniform_() > self.percentage
-            return img * mask.float()
+            return img.to(device) * mask.float()
 
 
 
