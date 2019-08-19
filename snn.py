@@ -75,6 +75,7 @@ correct = 0
 
 
 def validate():
+    global ANN_accuracy
     model.eval()
     val_loss, correct = 0, 0
     for data, target in train_loader2:
