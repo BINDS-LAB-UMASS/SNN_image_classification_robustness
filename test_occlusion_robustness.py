@@ -52,7 +52,7 @@ def main(occlusion_percentage=0):
             return F.log_softmax(x)
 
     train_dataset2 = datasets.MNIST('./data',
-                                       train=True,
+                                       train=False,
                                        download=True,
                                        transform=transforms.Compose([transforms.ToTensor(), RandomlyOcclude(occlusion_percentage)]))
 
