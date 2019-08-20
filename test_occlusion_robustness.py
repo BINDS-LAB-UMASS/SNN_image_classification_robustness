@@ -38,9 +38,6 @@ def main(occlusion_percentage=0):
 
     time = 100
 
-    ANN_accuracy = 0
-    SNN_accuracy = 0
-
     class RandomlyOcclude(object):
 
         def __init__(self, percentage):
@@ -92,7 +89,6 @@ def main(occlusion_percentage=0):
 
 
     def validate():
-        global ANN_accuracy
         model.eval()
         val_loss, correct = 0, 0
         for data, target in train_loader2:
@@ -106,8 +102,9 @@ def main(occlusion_percentage=0):
         ANN_accuracy = 100. * correct.to(torch.float32) / len(train_loader2.dataset)
 
         print("ANN accuracy:", ANN_accuracy)
+        return ANN_accuracy
 
-    validate()
+    ANN_accuracy = validate()
 
 
     start = t_()
